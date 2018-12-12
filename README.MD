@@ -81,7 +81,7 @@ Obtenemos una pantalla con opciones, para nuestro ejemplo particular elegiremos 
 
 Abrimos la carpeta del proyecto creado con VS Code, y colocamos el código mostrado a continuación en el archivo ubicado en src/extension.ts
 
-```[typescript]
+```typescript
 'use strict'; // Define que el archivo se ejecutara en modo estricto
 import * as vscode from 'vscode'; // Importa el paquete necesario para acceder al API de extensiones de VS Code
 
@@ -148,10 +148,15 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() { }
 ```
 
-<script src="https://gist.github.com/jhurtadojerves/fc88eb486af4d6d1e354e65b62122b36.js"></script>
 
+## Probando la extensión 
 
+Para ejecutar la extensión, se presiona la tecla F5. Entonces se abre una ventana que ya cuenta con la extensión cargada. Abrimos un archivo de texto.
 
+![Ventana con la extension cargada](https://i.imgur.com/5jvW9TD.png)
 
+Con el archivo abierto, seleccionamos el texto y presionamos la combinación de teclas `Shift + Ctrl + P` y seleccionamos el comando `gapline`.
 
+En la ventana que aparece elegimos la cantidad de líneas en dónde se va a divir el texto.
 
+![Ejecución de la aplicación](https://i.imgur.com/Wv1QmBC.gif)
