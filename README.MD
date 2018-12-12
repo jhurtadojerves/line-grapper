@@ -1,3 +1,9 @@
+Asignatura | Datos del Alumno | Fecha
+-- | -- | --
+Computación en el Cliente Web | **Apellidos:** Hurtado Jerves | 12 / 12 /2018
+-- | **Nombres:** Julio César  
+
+
 # Creación de una extensión para Visual Studio Code
 
 La creación de una extensión para VS Code necesita la instalación de dos paquetes de Software: Node.js y el propio VS Code.
