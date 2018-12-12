@@ -1,7 +1,7 @@
 {
-    "name": "line-gapper",
-    "displayName": "line-gapper",
-    "description": "Insertar una línea en blanco cada N líneas",
+    "name": "gapline",
+    "displayName": "gapline",
+    "description": "Insertar una linea en blanco cada N lineas",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.29.0"
@@ -10,14 +10,14 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:extension.gapline"
     ],
     "main": "./out/extension",
     "contributes": {
         "commands": [
             {
-                "command": "extension.sayHello",
-                "title": "Hello World"
+                "command": "extension.gapline",
+                "title": "gapline"
             }
         ]
     },

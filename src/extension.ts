@@ -1,29 +1,64 @@
-'use strict';
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+'use strict'; // Define que el archivo se ejecutara en modo estricto
+import * as vscode from 'vscode'; // Importa el paquete necesario para acceder al API de extensiones de VS Code
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+
+// Se declara la función mediante la cual la extensión es activada
 export function activate(context: vscode.ExtensionContext) {
-
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "line-gapper" is now active!');
-
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.sayHello', () => {
-        // The code you place here will be executed every time your command is executed
-
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World!');
+    /*En una variable de ámbito local (dentro de la función)
+    se registra el comando que utiliza la extensión
+    */
+    let disposable = vscode.commands.registerCommand('extension.gapline', () => {
+        // Obtenemos una "instancia" del editor activo de VS Code
+        var editor = vscode.window.activeTextEditor;
+        // Si no existe un editor activo, terminamos la ejecución de la función.
+        if (!editor) { return; }
+        // Obtenemos el texto seleccionado del editor activo
+        var selection = editor.selection;
+        // Obtenmos el texto de la selección
+        var text = editor.document.getText(selection);
+        /*Utilizando una promesa de ECMAScript 6 mediante el cual con una ventana solicitamos
+         el número de líneas a partir de las cuales se insertará un espacio en blanco
+         La cantidad de líneas se recibe en el primer parámetro de la Arrow Function
+         */
+        vscode.window.showInputBox({ prompt: 'Lineas?' }).then(value => {
+            // Se asigna el la cantidad de líneas en una variable de caracter local
+            let numberOfLines = +value;
+            // Creamos un array en blanco en dónde, posteriormente, se asignarán las líneas de texto
+            var textInChunks: Array<string> = [];
+            /* Con la función split dividimos el texto en un array a partir de los saltos de línea.
+            El valor retornado es un array, por lo que lo recorremos con la función forEach propia de los vectores.
+            La función forEach recibe dos parámetros. currentLine que representa el elemento actual, y lineIndex el índice del elemento
+            */
+            text.split('\n').forEach((currentLine: string, lineIndex) => {
+                // Se almacena cada línea (obtenida por split y por forEach) en el vector textInChunks
+                textInChunks.push(currentLine);
+                // Si el número de elemento (índice + 1) es múltiplo de numberOfLines se almacena una línea vacía
+                if ((lineIndex + 1) % numberOfLines === 0) textInChunks.push('');
+            });
+            /* Unimos cada chunk del vector en un solo texto, con la función join unimos todos los elementos de un vector
+            agregando entre ellos un caracter, en nuestro caso un salto de línea. 
+            */
+            text = textInChunks.join('\n');
+            // La función edit permite editar el contenido del editor selecciona, recibe como parámetro una arrow function
+            editor.edit((editBuilder) => {
+		    //constructor(startLine: number, startCharacter: number, endLine: number, endCharacter: number);
+            // La función vscode.Range recibe como parámetro la línea inicia, el caracter inicial, la línea final y el caracter final
+                var range = new vscode.Range(
+                    // Primera línea de la selección
+                    selection.start.line,
+                    // Comenzamos en 0
+                    0,
+                    // Última línea de la selección
+                    selection.end.line,
+                    // El último caracter de la selección, dado por el tamaño del texto
+                    editor.document.lineAt(selection.end.line).text.length
+                );
+                // Reemplazamos el contenido del editor por el texto que incluye las nuevas líneas en blanco
+                editBuilder.replace(range, text);
+            });
+        })
     });
-
     context.subscriptions.push(disposable);
 }
 
-// this method is called when your extension is deactivated
-export function deactivate() {
-}
+export function deactivate() { }
